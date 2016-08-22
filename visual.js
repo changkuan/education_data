@@ -15,7 +15,7 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
     .tickFormat(d3.format(",%"));   //unit .2s
-var svg = d3.select("body").append("svg")    // 設定圖表框架
+var svg = d3.select("body").append("svg")    
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -32,8 +32,7 @@ d3.csv("k_data.csv", function(error, data) {
   var ageNames = d3.keys(data[0]).filter(function(key) { 
     return key !== "State"; });
   data.forEach(function(d) {
-    d.ages = ageNames.map(function(name) { return {name: name, value: +d[name]}; });  //??
-    console.log(d)
+    d.ages = ageNames.map(function(name) { return {name: name, value: +d[name]}; });  
   });
   x0.domain(data.map(function(d) { return d.State; }));
   x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
@@ -46,16 +45,16 @@ d3.csv("k_data.csv", function(error, data) {
       .attr("class", "y axis")
       .call(yAxis)
     .append("text")
-      .attr("transform", "translate(0,-20)")//"rotate(-90)")  //逆時針轉90度
+      .attr("transform", "translate(0,-20)")//"rotate(-90)") 
       .attr("y", 10)
       .attr("dy", ".71em")
       .style("text-anchor", "end")
-      .text("");  //顯示單位
-  var state = svg.selectAll(".State")      //
+      .text("");  
+  var state = svg.selectAll(".State")      
       .data(data)
     .enter().append("g")
       .attr("class", "state")
-      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; }); //位移 ,向右
+      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; }); 
   state.selectAll("rect")
       .data(function(d) { return d.ages; })
     .enter().append("rect")
@@ -63,14 +62,14 @@ d3.csv("k_data.csv", function(error, data) {
       .attr("x", function(d) { return x1(d.name); })
       .attr("y", function(d) { return y(d.value); })
       .attr("height", function(d) { return height - y(d.value); })
-      .style("fill", function(d) { return color(d.name); })  //長條圖不同顏色
+      .style("fill", function(d) { return color(d.name); }) 
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
   var legend = svg.selectAll(".legend")
-      .data(ageNames.slice()) //? (reverse 倒置 slice ?
+      .data(ageNames.slice()) 
     .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(-40," + i * 20 + ")"; }); //位移 , i?
+      .attr("transform", function(d, i) { return "translate(-40," + i * 20 + ")"; }); 
   legend.append("rect") //
       .attr("x", width - 18)
       .attr("width", 18)
