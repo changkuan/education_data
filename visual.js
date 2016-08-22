@@ -1,0 +1,201 @@
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 1260 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width-100], .1);  //padding & outpadding both 0.1
+var x1 = d3.scale.ordinal();
+var y = d3.scale.linear()
+    .range([height, 0]);
+var color = d3.scale.ordinal()
+    .range(["#8a89a6", "#7b6888", "#6b486b", "#d0743c", "#ff8c00"]);
+var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom");
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(d3.format(",%"));   //unit .2s
+var svg = d3.select("body").append("svg")    // 設定圖表框架
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<span style='color:white'>" + (d.value*100).toFixed(2) + "%"+ "</span>";
+  })
+svg.call(tip);
+d3.csv("k_data.csv", function(error, data) {
+  if (error) throw error;
+  var ageNames = d3.keys(data[0]).filter(function(key) { 
+    return key !== "State"; });
+  data.forEach(function(d) {
+    d.ages = ageNames.map(function(name) { return {name: name, value: +d[name]}; });  //??
+    console.log(d)
+  });
+  x0.domain(data.map(function(d) { return d.State; }));
+  x1.domain(ageNames).rangeRoundBands([0, x0.rangeBand()]);
+  y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "translate(0,-20)")//"rotate(-90)")  //逆時針轉90度
+      .attr("y", 10)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("");  //顯示單位
+  var state = svg.selectAll(".State")      //
+      .data(data)
+    .enter().append("g")
+      .attr("class", "state")
+      .attr("transform", function(d) { return "translate(" + x0(d.State) + ",0)"; }); //位移 ,向右
+  state.selectAll("rect")
+      .data(function(d) { return d.ages; })
+    .enter().append("rect")
+      .attr("width", x1.rangeBand())
+      .attr("x", function(d) { return x1(d.name); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); })
+      .style("fill", function(d) { return color(d.name); })  //長條圖不同顏色
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+  var legend = svg.selectAll(".legend")
+      .data(ageNames.slice()) //? (reverse 倒置 slice ?
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(-40," + i * 20 + ")"; }); //位移 , i?
+  legend.append("rect") //
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { 
+        switch(d)
+        {
+          case "A":
+            return "研究所以上"
+          case "B":
+            return "大專院校"
+          case "C":
+            return "高中職"
+          case "D":
+            return "國中小"
+          case "E":
+            return "未受教育"
+          default:
+        }
+      });
+  d3.select(".master").on("change", change1);
+  d3.select(".university").on("change", change2);  
+  d3.select(".senior").on("change", change3); 
+  d3.select(".junior").on("change", change4);
+  d3.select(".none").on("change", change5); 
+ function change1() {
+    var x2 = x0.domain(data.sort(this.checked
+          = function(a, b) { return b.A - a.A; })
+          .map(function(d) { return d.State; }))
+          .copy();
+      var transition = svg.transition().duration(1000),
+          delay = function(d, i) { return i * 50; };
+      var state2 = transition.selectAll(".State")
+          .delay(delay)
+          .attr("x", function(d) { return x2(d.State); });
+      svg.selectAll("g.state")
+         .transition().duration(1500)
+         .delay(delay)
+         .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
+      transition.select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay);
+  }
+ function change2() {
+    var x2 = x0.domain(data.sort(this.checked
+          = function(a, b) { return b.B - a.B; })
+          .map(function(d) { return d.State; }))
+          .copy();
+      var transition = svg.transition().duration(1000),
+          delay = function(d, i) { return i * 50; };
+      var state2 = transition.selectAll(".State")
+          .delay(delay)
+          .attr("x", function(d) { return x2(d.State); });
+      svg.selectAll("g.state")
+         .transition().duration(1500)
+         .delay(delay)
+         .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
+      transition.select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay);
+  }
+ function change3() {
+    var x2 = x0.domain(data.sort(this.checked
+          = function(a, b) { return b.C - a.C; })
+          .map(function(d) { return d.State; }))
+          .copy();
+      var transition = svg.transition().duration(1000),
+          delay = function(d, i) { return i * 50; };
+      var state2 = transition.selectAll(".State")
+          .delay(delay)
+          .attr("x", function(d) { return x2(d.State); });
+      svg.selectAll("g.state")
+         .transition().duration(1500)
+         .delay(delay)
+         .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
+      transition.select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay);
+  }
+   function change4() {
+    var x2 = x0.domain(data.sort(this.checked
+          = function(a, b) { return b.D - a.D; })
+          .map(function(d) { return d.State; }))
+          .copy();
+      var transition = svg.transition().duration(1000),
+          delay = function(d, i) { return i * 50; };
+      var state2 = transition.selectAll(".State")
+          .delay(delay)
+          .attr("x", function(d) { return x2(d.State); });
+      svg.selectAll("g.state")
+         .transition().duration(1500)
+         .delay(delay)
+         .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
+      transition.select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay);
+  }
+   function change5() {
+    var x2 = x0.domain(data.sort(this.checked
+          = function(a, b) { return b.E - a.E; })
+          .map(function(d) { return d.State; }))
+          .copy();
+      var transition = svg.transition().duration(1000),
+          delay = function(d, i) { return i * 50; };
+      var state2 = transition.selectAll(".State")
+          .delay(delay)
+          .attr("x", function(d) { return x2(d.State); });
+      svg.selectAll("g.state")
+         .transition().duration(1500)
+         .delay(delay)
+         .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
+      transition.select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay);
+  }
+  
+});
