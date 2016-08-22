@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+<html>
+<head>
 <meta charset="utf-8">
 <link rel="shortcut icon" href="">
-<head>
+
 <style>
 
 body {
@@ -22,7 +24,6 @@ body {
 .x.axis path {
   /*display: none;*/
 }
-
 
 .d3-tip {
   line-height: 1;
@@ -53,10 +54,10 @@ body {
   left: 0;
 }
 
-
 </style>
 </head>
 <body>
+<h1 id="theme">台灣各縣市教育程度差異</h1>
 <p>排序:</p>
 <div class="master"><input type="radio" name="sort">研究所以上</div>
 <div class="university"><input type="radio" name="sort">大專院校</div>
@@ -65,8 +66,8 @@ body {
 
 <script type="text/javascript" src="d3.v3.min.js"></script>
 <script type="text/javascript" src="d3.tip.v0.6.3.js"></script>
-<script>
 
+<script>
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 1260 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -330,7 +331,8 @@ d3.csv("k_data.csv", function(error, data) {
           .delay(delay);
 
   }
-
+  
 });
 
 </script>
+</html>
