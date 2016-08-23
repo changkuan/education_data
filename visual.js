@@ -106,95 +106,95 @@ d3.csv("k_data.csv", function(error, data) {
           = function(a, b) { return b.A - a.A; })
           .map(function(d) { return d.State; }))
           .copy();
-      var transition = svg.transition().duration(1000),
+      var transition = svg.transition().duration(1500),
           delay = function(d, i) { return i * 50; };
       var state2 = transition.selectAll(".State")
-          .delay(delay)
+          //.delay(delay)
           .attr("x", function(d) { return x2(d.State); });
       svg.selectAll("g.state")
          .transition().duration(1500)
-         .delay(delay)
+         //.delay(delay)
          .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
       transition.select(".x.axis")
           .call(xAxis)
           .selectAll("g")
-          .delay(delay);
+          //.delay(delay);
   }
  function change2() {
     var x2 = x0.domain(data.sort(this.checked
           = function(a, b) { return b.B - a.B; })
           .map(function(d) { return d.State; }))
           .copy();
-      var transition = svg.transition().duration(1000),
+      var transition = svg.transition().duration(1500),
           delay = function(d, i) { return i * 50; };
       var state2 = transition.selectAll(".State")
-          .delay(delay)
+          //.delay(delay)
           .attr("x", function(d) { return x2(d.State); });
       svg.selectAll("g.state")
          .transition().duration(1500)
-         .delay(delay)
+         //.delay(delay)
          .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
       transition.select(".x.axis")
           .call(xAxis)
           .selectAll("g")
-          .delay(delay);
+          //.delay(delay);
   }
  function change3() {
     var x2 = x0.domain(data.sort(this.checked
           = function(a, b) { return b.C - a.C; })
           .map(function(d) { return d.State; }))
           .copy();
-      var transition = svg.transition().duration(1000),
+      var transition = svg.transition().duration(1500),
           delay = function(d, i) { return i * 50; };
       var state2 = transition.selectAll(".State")
-          .delay(delay)
+          //.delay(delay)
           .attr("x", function(d) { return x2(d.State); });
       svg.selectAll("g.state")
          .transition().duration(1500)
-         .delay(delay)
+         //.delay(delay)
          .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
       transition.select(".x.axis")
           .call(xAxis)
           .selectAll("g")
-          .delay(delay);
+          //.delay(delay);
   }
    function change4() {
     var x2 = x0.domain(data.sort(this.checked
           = function(a, b) { return b.D - a.D; })
           .map(function(d) { return d.State; }))
           .copy();
-      var transition = svg.transition().duration(1000),
+      var transition = svg.transition().duration(1500),
           delay = function(d, i) { return i * 50; };
       var state2 = transition.selectAll(".State")
-          .delay(delay)
+          //.delay(delay)
           .attr("x", function(d) { return x2(d.State); });
       svg.selectAll("g.state")
          .transition().duration(1500)
-         .delay(delay)
+         //.delay(delay)
          .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
       transition.select(".x.axis")
           .call(xAxis)
           .selectAll("g")
-          .delay(delay);
+          //.delay(delay);
   }
    function change5() {
     var x2 = x0.domain(data.sort(this.checked
           = function(a, b) { return b.E - a.E; })
           .map(function(d) { return d.State; }))
           .copy();
-      var transition = svg.transition().duration(1000),
+      var transition = svg.transition().duration(1500),
           delay = function(d, i) { return i * 50; };
       var state2 = transition.selectAll(".State")
-          .delay(delay)
+          //.delay(delay)
           .attr("x", function(d) { return x2(d.State); });
       svg.selectAll("g.state")
          .transition().duration(1500)
-         .delay(delay)
+         //.delay(delay)
          .attr("transform", function(d) { return "translate(" +x2(d.State) + ",0)"; });
       transition.select(".x.axis")
           .call(xAxis)
           .selectAll("g")
-          .delay(delay);
+          //.delay(delay);
   }
   
 });
